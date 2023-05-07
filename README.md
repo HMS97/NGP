@@ -1,3 +1,8 @@
+## First do face recognition, then do whispering detection, speaker diarization, and combine video speech darilization.
+## Then video captioning
+## Then langchian find related frames interval
+
+
 # 1. Face Recognition
 ```
 
