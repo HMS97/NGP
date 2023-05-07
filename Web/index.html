@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Video Player</title>
+  <link href="//vjs.zencdn.net/5.4.6/video-js.min.css" rel="stylesheet">
+  <script src="//vjs.zencdn.net/5.4.6/video.min.js"></script>
+  <style>
+    body {
+      font-family: "Arial", sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .video-player {
+      position: relative;
+      width: 640px;
+    }
+    .progress-bar-container {
+      position: relative;
+      width: 640px;
+      height: 10px;
+      background-color: #8a0202;
+      cursor: pointer;
+      overflow: visible;
+      margin-top: 10px;
+    }
+    .progress-bar {
+      position: absolute;
+      height: 100%;
+      width: 640px;
+      background-color: #cc80ce;
+    }
+    .interval-masks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .interval-mask {
+      position: absolute;
+      height: 100%;
+      background-color: rgba(144, 38, 38, 0.6);
+    }
+    .circle {
+      width: 10px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: rgb(128, 255, 179);
+      position: absolute;
+      top: calc(50% - 5px);
+      left: 0;
+    }
+    .face-image-containers {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 20px;
+    }
+    .face-image-container {
+      display: flex;
+      flex-direction: column;
+      flex-basis: 50px;
+      height: 50px;
+      margin-right: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s;
+    }
+    .face-image-container:hover {
+      box-shadow: 0px 0px 15 px rgba(0, 0, 0, 0.2);
+    }
+    .face-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      }
+      #question-form {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      width: 100%;
+      }
+      #question-input {
+      flex-grow: 1;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      button[type="submit"] {
+      background-color: #cc80ce;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+      }
+      button[type="submit"]:hover {
+      background-color: #b062c2;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="video-player">
+
+  <video id="video" class="video-js vjs-default-skin" controls preload="auto" width="640" height="360" >
+    <source src="my-video.mp4" type="video/mp4" />
+    
+  </video>
+  <div class="progress-bar-container">
+    <div id="progress-bar" class="progress-bar"></div>
+    <div id="interval-masks" class="interval-masks"></div>
+    <div id="circle" class="circle"></div>
+  </div>
+    </div> 
+
+    <div class="face-image-containers">
+    </div>
+    <form id="question-form">
+      <input type="text" id="question-input" placeholder="Type your question">
+      <button type="submit">Send</button>
+    </form>
+
+  </div>
+
+  </div>
+  <script>
+
+const video = videojs('video', {autoplay: true});
+const progressBar = document.getElementById('progress-bar');
+const circle = document.createElement('div');
+
+intervals= 0;
+circle.classList.add('circle');
+progressBar.appendChild(circle);
+
+const questionForm = document.getElementById("question-form");
+questionForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const questionInput = document.getElementById("question-input");
+  const questionText = questionInput.value;
+  // Call your FastAPI endpoint with the question
+  try {
+    const response = await fetch( `http://localhost:8000/ask_question/${questionText}`);
+    const result = await response.json();
+    console.log("API response:", result);
+    intervals = result
+
+    if (!intervals) {
+      alert("No available frames");
+    } else {
+      replaceVideoWithInterval();
+      clearIntervalMasks();
+      // Do something with the result
+    }
+    // Do something with the result
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+
+  // Clear the input field
+  questionInput.value = "";
+});
+
+
+
+  fetch('http://localhost:8000/video-data/12')
+  .then(response => response.json())
+  .then(data => {
+    const faceImageContainers = document.querySelector('.face-image-containers');
+    for (let i = 0; i < data.length; i++) {
+      const faceImageURL = data[i].face;
+      // intervals = data[i].intervals;
+
+      const faceImageContainer = document.createElement('div');
+      faceImageContainer.classList.add('face-image-container');
+      faceImageContainer.setAttribute('id', 'face-image-container-' + i);
+      faceImageContainer.setAttribute('data-index', i);
+
+      const faceImage = document.createElement('img');
+      faceImage.classList.add('face-image');
+      faceImage.setAttribute('src', 'data:image/png;base64,' + faceImageURL);
+      faceImageContainer.appendChild(faceImage);
+
+
+      faceImageContainer.addEventListener('click', function() {
+        // call function with intervals data
+        const index = this.getAttribute('data-index');
+        intervals = data[index].intervals;
+        // console.log(intervals);
+
+        replaceVideoWithInterval();
+        clearIntervalMasks()
+      });
+
+      faceImageContainers.appendChild(faceImageContainer);
+    }
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+
+function updateProgressBar() {
+  const percentage = (video.currentTime() / video.duration) * 100;
+  progressBar.style.width = percentage + '%';
+}
+
+function updateCirclePosition() {
+  const circlePosition = (video.currentTime() / video.duration()) * progressBar.clientWidth;
+  // console.log(progressBar.clientWidth )
+  // alert(circlePosition)
+  circle.style.left = circlePosition + 'px';
+}
+
+function checkTimeInterval() {
+  
+
+  const currentInterval = intervals.find(interval => video.currentTime() >= interval.start && video.currentTime() < interval.end);
+
+  if (!currentInterval) {
+    const nextInterval = intervals.find(interval => video.currentTime() < interval.start);
+    if (nextInterval) {
+      // video.pause();
+      video.currentTime(nextInterval.start);
+      // video.play();
+    } else {
+      video.pause();
+    }
+  }
+  }
+
+
+
+function replaceVideoWithInterval() {
+  video.pause();
+  video.load();
+  video.play();
+}
+
+function createIntervalMasks() {
+  const intervalMasksContainer = document.getElementById('interval-masks');
+  intervals.forEach(interval => {
+    const mask = document.createElement('div');
+    mask.classList.add('interval-mask');
+    const startPercentage = (interval.start / video.duration()) * 100;
+    const endPercentage = (interval.end / video.duration()) * 100;
+    const widthPercentage = endPercentage - startPercentage;
+    mask.style.left = startPercentage + '%';
+    mask.style.width = widthPercentage + '%';
+    intervalMasksContainer.appendChild(mask);
+  });
+}
+
+// clear the IntervalMasks with no intervals
+function clearIntervalMasks() {
+  const intervalMasksContainer = document.getElementById('interval-masks');
+  while (intervalMasksContainer.firstChild) {
+    intervalMasksContainer.removeChild(intervalMasksContainer.firstChild);
+  }
+}
+
+
+video.ready(function(){
+
+  video.on('timeupdate', function(){
+    if ( intervals != 0)
+  {
+      updateProgressBar();
+    checkTimeInterval();
+    updateCirclePosition();
+    createIntervalMasks();
+    }
+    else{
+      console.log("get into it");
+    }
+   
+
+  });
+
+});
+
+  function updateVideoTime(e) {
+    video.ready(function(){
+  const rect = progressBar.getBoundingClientRect();
+  const progressPercentage = (e.clientX - rect.left) / rect.width;
+  const time = progressPercentage * video.duration();
+  video.currentTime(time);})
+}
+
+
+let isMouseDown = false;
+
+circle.addEventListener('mousedown', function(e) {
+  isMouseDown = true;
+  updateVideoTime(e);
+});
+
+document.addEventListener('mouseup', function() {
+  isMouseDown = false;
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (isMouseDown) {
+    updateVideoTime(e);
+  }
+});
+
+
+</script>
+</body>
+</html>

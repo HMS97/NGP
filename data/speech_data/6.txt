@@ -1,0 +1,34 @@
+At frame 588 to 589, SPEAKER 2 says:  Avengers!
+At frame 615 to 616, SPEAKER 2 says:  Assemble.
+At frame 618 to 619, SPEAKER 32 says:  Assemble!
+At frame 648 to 649, SPEAKER 32 says:  Aah!
+At frame 670 to 671, SPEAKER 12 says:  No, no, give me that.
+At frame 671 to 672, SPEAKER 12 says:  Grab the little one.
+At frame 678 to 679, SPEAKER 6 says:  Aah!
+At frame 712 to 713, SPEAKER 2 says:  What the hell is this?
+At frame 714 to 715, SPEAKER 9 says:  Friday, what are they firing at?
+At frame 715 to 717, SPEAKER 25 says:  Something just entered the upper atmosphere.
+At frame 729 to 730, SPEAKER 2 says:  Oh, yeah!
+At frame 751 to 753, SPEAKER 15 says:  Zampers, we need an assist here.
+At frame 761 to 762, SPEAKER 37 says:  Hi, I'm Peter Parker.
+At frame 764 to 765, SPEAKER 28 says:  Hey, Peter Parker.
+At frame 769 to 771, SPEAKER 37 says:  I don't know how you're gonna get us through all that.
+At frame 772 to 773, SPEAKER 28 says:  Don't worry.
+At frame 774 to 775, SPEAKER 21 says:  She's got help.
+At frame 798 to 798, SPEAKER 32 says:  Aah!
+At frame 858 to 860, SPEAKER 27 says:  I am inevitable.
+At frame 881 to 881, SPEAKER 32 says:  And I...
+At frame 884 to 884, SPEAKER 20 says:  am...
+At frame 889 to 889, SPEAKER 27 says:  Iron Man.
+At frame 1009 to 1009, SPEAKER 29 says:  This...
+At frame 1010 to 1011, SPEAKER 35 says:  is my destiny.
+At frame 1015 to 1015, SPEAKER 36 says:  Avengers!
+At frame 1017 to 1018, SPEAKER 15 says:  Assemble.
+At frame 1018 to 1018, SPEAKER 32 says:  No!
+At frame 1020 to 1021, SPEAKER 2 says:  Evil faith!
+At frame 1024 to 1025, SPEAKER 2 says:  Oh, yeah!
+At frame 1026 to 1027, SPEAKER 16 says:  No, no, give me that.
+At frame 1027 to 1028, SPEAKER 12 says:  You have the little one.
+At frame 1030 to 1032, SPEAKER 27 says:  I am inevitable.
+At frame 1033 to 1033, SPEAKER 9 says:  And I...
+At frame 1034 to 1034, SPEAKER 20 says:  am...
