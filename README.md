@@ -18,7 +18,7 @@ python  blip2_caption.py
 
 ##  The above code is for data processing. once the data is processed, we can run the following code to run the web app
 
-# #. Set up the FASTAI environment
+#  Set up the FASTAPI environment
 ```
 uvicorn main:app --reload
 
