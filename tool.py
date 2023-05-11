@@ -75,6 +75,38 @@ import re
 import os
 import shutil
 
+def split_video_file(path, content, num_files):
+    try:
+        shutil.rmtree(f"{path}")
+    except:
+        pass
+
+    def split_text(text):
+        pattern = r"(Frame \d+ to \d+:)"
+        segments = re.split(pattern, text)
+        cleaned_segments = []
+
+        for i in range(1, len(segments), 2):
+            cleaned_segments.append(segments[i] + segments[i+1])
+
+        return cleaned_segments
+
+    os.makedirs(f"{path}")
+
+    segments = split_text(content)
+    print( len(segments))
+
+    # Calculate the number of segments to put in each chunk
+    segments_per_chunk = (4097//int(np.mean([len(i) for i in segments])))
+    # Split the segments into chunks
+    chunks = [segments[i:i+segments_per_chunk] for i in range(0, len(segments), segments_per_chunk)]
+
+    # Write each chunk to a separate file
+    for i, chunk in enumerate(chunks):
+        with open(f'{path}/{i+1}.txt', 'w') as f:
+            f.write('\n'.join(chunk))
+
+
 def split_speech_file(path, content, num_files):
     def split_text(text):
         segments = text.split("At frame")
@@ -92,9 +124,11 @@ def split_speech_file(path, content, num_files):
 
     # Split the content into segments based on "At frame"
     segments = split_text(content)
+    print( len(segments))
 
     # Calculate the number of segments to put in each chunk
-    segments_per_chunk = len(segments) // num_files
+    segments_per_chunk = (4097//int(np.mean([len(i) for i in segments])))
+
 
     # Split the segments into chunks
     chunks = [segments[i:i+segments_per_chunk] for i in range(0, len(segments), segments_per_chunk)]
@@ -103,40 +137,6 @@ def split_speech_file(path, content, num_files):
     for i, chunk in enumerate(chunks):
         with open(f'{path}/{i+1}.txt', 'w') as f:
             f.write('\n'.join(chunk))
-
-
-def split_video_file(path, content, num_files):
-    try:
-        shutil.rmtree(f"{path}")
-    except:
-        pass
-
-    def split_text(text):
-        pattern = r"(Frame \d+ to \d+: visual_text:)"
-        segments = re.split(pattern, text)
-        cleaned_segments = []
-
-        for i in range(1, len(segments), 2):
-            cleaned_segments.append(segments[i] + segments[i+1])
-
-        return cleaned_segments
-
-    os.makedirs(f"{path}")
-
-    segments = split_text(content)
-
-    # Calculate the number of segments to put in each chunk
-    segments_per_chunk = len(segments) // num_files
-
-    # Split the segments into chunks
-    chunks = [segments[i:i+segments_per_chunk] for i in range(0, len(segments), segments_per_chunk)]
-
-    # Write each chunk to a separate file
-    for i, chunk in enumerate(chunks):
-        with open(f'{path}/{i+1}.txt', 'w') as f:
-            f.write('\n'.join(chunk))
-
-
 
 def write_text(path, text):
     with open(path, 'w') as file:
@@ -152,6 +152,8 @@ def write_text(path, text):
             if not re.search(r'Frame \d+ to \d+ text end.', sentence):
                 file.write('\n')
         file.close()
+
+
 
 
 

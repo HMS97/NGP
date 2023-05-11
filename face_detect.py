@@ -282,8 +282,8 @@ class FaceRecognizer:
 
     def pack_data(self):
         data = {}
-        data['face_encodings'] = self.face_encodings
-        data['face_images'] = self.face_images
+        # data['face_encodings'] = self.face_encodings
+        # data['face_images'] = self.face_images
         data['face_records'] = self.face_records
         data['face_locations'] = self.face_locations
         return data

@@ -1,34 +1,65 @@
-At frame 5 to 6, SPEAKER 34 says:  He used the stones again.
-At frame 7 to 7, SPEAKER 2 says:  Hey, hey.
-At frame 8 to 10, SPEAKER 19 says:  We'd be going in short-handed, you know?
-At frame 10 to 11, SPEAKER 1 says:  Look, he's still got the stones, so...
-At frame 12 to 12, SPEAKER 13 says:  So let's get him.
+At frame 5 to 6, SPEAKER 17 says:  He used the stones again.
+At frame 7 to 7, SPEAKER 9 says:  Hey, hey.
+At frame 8 to 10, SPEAKER 5 says:  We'd be going in short-handed, you know?
+At frame 10 to 11, SPEAKER 10 says:  Look, he's still got the stones, so...
+At frame 12 to 12, SPEAKER 12 says:  So let's get him.
 At frame 13 to 14, SPEAKER 21 says:  We used them to bring everyone back.
-At frame 15 to 15, SPEAKER 3 says:  Just like that?
-At frame 16 to 16, SPEAKER 24 says:  Yeah.
-At frame 17 to 18, SPEAKER 34 says:  Just like that.
-At frame 18 to 22, SPEAKER 34 says:  Even if there's a small chance that we can undo this, I mean, we owe it to everyone who's
-At frame 22 to 23, SPEAKER 34 says:  not in this room to try.
-At frame 23 to 27, SPEAKER 19 says:  If we do this, how do we know it's gonna end any differently than it did before?
+At frame 15 to 15, SPEAKER 11 says:  Just like that?
+At frame 16 to 16, SPEAKER 28 says:  Yeah.
+At frame 17 to 18, SPEAKER 17 says:  Just like that.
+At frame 18 to 22, SPEAKER 17 says:  Even if there's a small chance that we can undo this, I mean, we owe it to everyone who's
+At frame 22 to 23, SPEAKER 17 says:  not in this room to try.
+At frame 23 to 27, SPEAKER 5 says:  If we do this, how do we know it's gonna end any differently than it did before?
 At frame 28 to 29, SPEAKER 21 says:  It was before you didn't have me.
-At frame 30 to 33, SPEAKER 1 says:  Hey, new girl, everybody in this room is about that superhero life.
-At frame 34 to 36, SPEAKER 1 says:  And if you don't mind my asking, where the hell have you been all this time?
+At frame 30 to 33, SPEAKER 10 says:  Hey, new girl, everybody in this room is about that superhero life.
+At frame 34 to 36, SPEAKER 10 says:  And if you don't mind my asking, where the hell have you been all this time?
 At frame 37 to 41, SPEAKER 21 says:  There are a lot of other planets in the universe, but unfortunately, they didn't have you guys.
-At frame 61 to 61, SPEAKER 26 says:  I like this one.
-At frame 67 to 68, SPEAKER 5 says:  Let's go get this son of a bitch.
-At frame 71 to 74, SPEAKER 19 says:  For years, I've been treating the Hulk like he's some kind of disease, something to get
-At frame 74 to 74, SPEAKER 4 says:  rid of.
-At frame 76 to 78, SPEAKER 19 says:  But then I started looking at him as the cure.
-At frame 79 to 80, SPEAKER 19 says:  Eighteen months in a gamma lab.
-At frame 81 to 84, SPEAKER 19 says:  I put the brains and the brawn together, and now look at me.
-At frame 86 to 87, SPEAKER 29 says:  I'm the best of both worlds.
-At frame 87 to 88, SPEAKER 13 says:  Excuse me, Mr. Hulk?
-At frame 88 to 88, SPEAKER 18 says:  Yes.
-At frame 89 to 90, SPEAKER 16 says:  Can we get a photo?
-At frame 90 to 91, SPEAKER 13 says:  One hundred percent, little person.
-At frame 91 to 92, SPEAKER 19 says:  Come on, step out.
-At frame 92 to 92, SPEAKER 23 says:  Do you mind?
-At frame 93 to 93, SPEAKER 23 says:  Oh, yeah.
-At frame 94 to 95, SPEAKER 23 says:  Thanks.
-At frame 95 to 96, SPEAKER 30 says:  Say green.
-At frame 96 to 96, SPEAKER 23 says:  Green.
+At frame 61 to 61, SPEAKER 3 says:  I like this one.
+At frame 67 to 68, SPEAKER 16 says:  Let's go get this son of a bitch.
+At frame 71 to 74, SPEAKER 5 says:  For years, I've been treating the Hulk like he's some kind of disease, something to get
+At frame 74 to 74, SPEAKER 9 says:  rid of.
+At frame 76 to 78, SPEAKER 5 says:  But then I started looking at him as the cure.
+At frame 79 to 80, SPEAKER 5 says:  Eighteen months in a gamma lab.
+At frame 81 to 84, SPEAKER 5 says:  I put the brains and the brawn together, and now look at me.
+At frame 86 to 87, SPEAKER 19 says:  I'm the best of both worlds.
+At frame 87 to 88, SPEAKER 4 says:  Excuse me, Mr. Hulk?
+At frame 88 to 88, SPEAKER 12 says:  Yes.
+At frame 89 to 90, SPEAKER 19 says:  Can we get a photo?
+At frame 90 to 91, SPEAKER 12 says:  One hundred percent, little person.
+At frame 91 to 92, SPEAKER 5 says:  Come on, step out.
+At frame 92 to 92, SPEAKER 15 says:  Do you mind?
+At frame 93 to 93, SPEAKER 34 says:  Oh, yeah.
+At frame 94 to 95, SPEAKER 34 says:  Thanks.
+At frame 95 to 96, SPEAKER 20 says:  Say green.
+At frame 96 to 96, SPEAKER 34 says:  Green.
+At frame 98 to 99, SPEAKER 25 says:  Did you get that?
+At frame 99 to 100, SPEAKER 6 says:  That's good.
+At frame 100 to 101, SPEAKER 33 says:  You wanna grab one with me?
+At frame 101 to 102, SPEAKER 5 says:  I'm Ant-Man.
+At frame 102 to 103, SPEAKER 25 says:  They're Hulk fans.
+At frame 103 to 104, SPEAKER 33 says:  They don't know Ant-Man.
+At frame 104 to 105, SPEAKER 15 says:  Nobody does.
+At frame 105 to 106, SPEAKER 27 says:  No, he wants to take a picture with them.
+At frame 106 to 106, SPEAKER 27 says:  I do want a picture.
+At frame 115 to 116, SPEAKER 5 says:  I do want a picture with them.
+At frame 116 to 117, SPEAKER 15 says:  He's even saying no, he doesn't.
+At frame 117 to 117, SPEAKER 11 says:  I get it.
+At frame 118 to 119, SPEAKER 15 says:  Come on, the kid.
+At frame 119 to 120, SPEAKER 15 says:  I don't want it either.
+At frame 120 to 121, SPEAKER 15 says:  I don't want a picture with them.
+At frame 121 to 122, SPEAKER 5 says:  He's gonna feel bad.
+At frame 122 to 123, SPEAKER 15 says:  They're happy, kid.
+At frame 123 to 124, SPEAKER 15 says:  They said they'll do it.
+At frame 124 to 125, SPEAKER 15 says:  I don't want a picture.
+At frame 126 to 127, SPEAKER 33 says:  No, you feel bad.
+At frame 127 to 128, SPEAKER 12 says:  Thank you, Mr. Hulk.
+At frame 128 to 129, SPEAKER 5 says:  No, it's great, kids.
+At frame 129 to 130, SPEAKER 5 says:  Thank you very much.
+At frame 130 to 131, SPEAKER 25 says:  Hulk out.
+At frame 131 to 131, SPEAKER 8 says:  What the?
+At frame 133 to 133, SPEAKER 33 says:  Whew.
+At frame 133 to 134, SPEAKER 33 says:  Something died in here.
+At frame 134 to 135, SPEAKER 33 says:  Hello.
+At frame 135 to 136, SPEAKER 33 says:  Thor?
+At frame 136 to 139, SPEAKER 33 says:  Uh, you hear about the cable?
+At frame 139 to 146, SPEAKER 29 says:  The Cinemax went out two weeks ago.

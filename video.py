@@ -3,22 +3,13 @@
 import moviepy.editor as mp
 from moviepy.editor import *
 import cv2
-from third_party.pyannote_whisper.utils import diarize_text
 import numpy as np 
-from pyannote.audio import Pipeline
-from sklearn.metrics.pairwise import cosine_similarity
 from face_detect import FaceRecognizer
-import networkx as nx
 import pickle
 from tool import *
-from speechbrain.pretrained import WaveformEnhancement
 import torch
-from faster_whisper import WhisperModel
-from speechbrain.pretrained import SpectralMaskEnhancement
 import gc
-
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
 import numpy as np
 import time 
 import shutil

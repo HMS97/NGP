@@ -16,7 +16,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
 
-vs = VideoSeparator( load_data_path = 'data.pkl', path = "/home/huimingsun/Desktop/RESEARCH_PROJECT/NGP/data/video.mp4")
+vs = VideoSeparator( load_data_path = 'data_v1.pkl', path = "/home/huimingsun/Desktop/RESEARCH_PROJECT/NGP/data/video.mp4")
 vs.read_video()
 frame_list = vs.frames
 audio_text_result = vs.pack_data['audio_text_result']
@@ -27,16 +27,21 @@ for item in audio_text_result:
     transformed_audio_result.append([[int(item['start']), int(item['end'])], item['speaker'], item['text']])
 
 
-processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-6.7b")
+# processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-6.7b")
+# model = Blip2ForConditionalGeneration.from_pretrained(
+#     "Salesforce/blip2-opt-6.7b", torch_dtype=torch.float16
+# ).to(device)
+
+processor = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
 model = Blip2ForConditionalGeneration.from_pretrained(
-    "Salesforce/blip2-opt-6.7b", torch_dtype=torch.float16
+    "Salesforce/blip2-opt-2.7b", torch_dtype=torch.float16
 ).to(device)
 
 
 resized_video = [cv2.resize(frame, (256, 256)) for frame in vs.frames]
 resized_video = [Image.fromarray(frame) for frame in resized_video]
 
-time_length = 8
+time_length = 4
 
 
 frame_interval = time_length // 4
@@ -103,10 +108,11 @@ def find_near_speech_text(speech_data, T, time_range, speaker_time = None):
         speaker = data[1]
         text = data[2]
 
-        if (
-            start_time <= T <= end_time or
-            T - time_range <= start_time <= T and T - time_range <= end_time <= T
-        ):
+        # if (
+        #     start_time <= T <= end_time or
+        #     T - time_range <= start_time <= T and T - time_range <= end_time <= T
+        # ):
+        if (start_time <= T + time_range  ):
             if speaker is None: speaker = 'UNKNOW'
             if speaker_time != None: 
                 string = f' At frame {start_time} to {end_time}, {speaker} says: {text} '
@@ -123,8 +129,8 @@ def combine_speech_video(time,modified_video,transformed_audio_result, time_leng
     visual_text =multi_frame_Video_caption(time = time, modified_video = modified_video, time_length = time_length)
     speech_text = find_near_speech_text(transformed_audio_result, T = time, time_range= 20, speaker_time = None)
     
-    all_text =   f' Frame {time} to {time+time_length}: visual_text: ' + visual_text + ' speech_text: '+ speech_text + f" Frame {time} to {time+time_length} text end. "
-    visual_text =   f' Frame {time} to {time+time_length}: visual_text: ' + visual_text + f" Frame {time} to {time+time_length} text end. "
+    all_text =   f' Frame {time} to {time+time_length}:' + visual_text + speech_text + f" Frame {time} to {time+time_length} text end. "
+    visual_text =   f' Frame {time} to {time+time_length}: ' + visual_text + f" Frame {time} to {time+time_length} text end. "
     speech_text =   f' Frame {time} to {time+time_length}:  speech_text: '  + speech_text + f" Frame {time} to {time+time_length} text end. "
 
     
@@ -157,13 +163,13 @@ split_speech_file('data/speech_data', all_speech_text,( numbers//800 + 1))
 
 
 numbers = num_tokens_from_string(continus_visual_text,"cl100k_base" )
-split_video_file('data/vision_text', continus_visual_text,( numbers//1100 + 1))
+split_video_file('data/vision_data', continus_visual_text,( numbers//1100 + 1))
 
 
 
 numbers = num_tokens_from_string(continus_summary_text,"cl100k_base" )
             
-split_video_file('data/summary_text', continus_summary_text,( numbers//1100 + 1))
+split_video_file('data/summary_data', continus_summary_text,( numbers//1100 + 1))
 
 
 

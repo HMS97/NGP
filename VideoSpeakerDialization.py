@@ -32,7 +32,7 @@ class VSDialization:
         # Code for processing segments with whisperX
         model = whisper.load_model(self.whisper_model)
         result = model.transcribe(self.audio_file,beam_size = 2)
-        model_a, metadata = whisperx.load_align_model(language_code=result["language"],  device=self.device )
+        model_a, metadata = whisperx.load_align_model(language_code=result["language"], model_name = 'WAV2VEC2_ASR_LARGE_LV60K_960H', device=self.device )
         asr_result = [i for i in result["segments"] if '♪' not in i['text']]
         result_aligned = whisperx.align(asr_result, model_a, metadata, self.audio_file, self.device)
 
@@ -158,74 +158,6 @@ class VSDialization:
 
         return face_speaker_mapping
 
-    def _process_data_to_face_map(self, input_data, interval=20, min_count=2):
-        summary_data = {}
-
-        # Aggregate the data by speaker and face within the specified time interval
-        for entry in input_data:
-            start_time = entry['start']
-            speaker = entry['speaker']
-            likely_faces = entry['likely_face']
-            likely_face_appear_times = entry['likely_face_appear_times']
-
-            if speaker not in summary_data:
-                summary_data[speaker] = {}
-
-            for face, face_appear_times in zip(likely_faces, likely_face_appear_times):
-                if face not in summary_data[speaker]:
-                    summary_data[speaker][face] = {'count': face_appear_times, 'timestamps': [start_time]}
-                else:
-                    summary_data[speaker][face]['count'] += face_appear_times
-                    summary_data[speaker][face]['timestamps'].append(start_time)
-
-        # Filter out isolated faces that appear only once within the specified time interval
-        for speaker, face_counts in summary_data.items():
-            face_counts_copy = face_counts.copy()
-            for face, face_data in face_counts_copy.items():
-                timestamps = sorted(face_data['timestamps'])
-                isolated_timestamps = []
-                for i in range(1, len(timestamps)):
-                    left_interval_count = sum(1 for t in timestamps[:i] if timestamps[i] - t <= interval)
-                    right_interval_count = sum(1 for t in timestamps[i+1:] if t - timestamps[i] <= interval)
-                    if left_interval_count + right_interval_count <=  min_count:
-                        isolated_timestamps.append(timestamps[i])
-
-                if len(isolated_timestamps)>=1:
-                    if face in summary_data[speaker]:
-                        del summary_data[speaker][face]
-
-                    # Find the next most likely speaker
-                    next_most_likely_speaker = None
-                    max_count = 0
-                    for speaker, face_data in face_counts.items():
-                        if face_data['count'] > max_count:
-                            max_count = face_data['count']
-                            next_most_likely_speaker = speaker
-
-                    # Update the speaker information for the corresponding segment
-                    if next_most_likely_speaker:
-                        for isolated_timestamp in isolated_timestamps:
-                            segment_index = [i for i, segment in enumerate(input_data) if segment["speaker"] == speaker and segment["start"] == isolated_timestamp]
-                            for idx in segment_index:
-                                input_data[idx]["speaker"] = next_most_likely_speaker
-                                            
-                # Convert the summary data to a face_data dictionary
-                face_data_dict = {}
-                for speaker, face_counts in summary_data.items():
-                    for face, face_data in face_counts.items():
-                        if face not in face_data_dict:
-                            face_data_dict[face] = []
-
-                        face_data_dict[face].append((speaker, face_data['count']))
-
-                # Sort the speaker lists in face_data_dict by count time in descending order
-                for face in face_data_dict:
-                    face_data_dict[face].sort(key=lambda x: x[1], reverse=True)
-
-        # Find the best speaker-to-face mapping
-        face_speaker_mapping = self._find_best_speaker_to_face_mapping(face_data_dict)
-
-        return face_speaker_mapping
 
 
     def _process_embeddings(self):
@@ -342,11 +274,133 @@ class VSDialization:
         del self.speaker_embedding
         torch.cuda.empty_cache()
         gc.collect()    
+        
+        
+    def _process_data_to_face_map(self, input_data, interval=20, min_count=2):
+        summary_data = {}
+
+        # Aggregate the data by speaker and face within the specified time interval
+        for entry in input_data:
+            start_time = entry['start']
+            speaker = entry['speaker']
+            likely_faces = entry['likely_face']
+            likely_face_appear_times = entry['likely_face_appear_times']
+
+            if speaker not in summary_data:
+                summary_data[speaker] = {}
+
+            for face, face_appear_times in zip(likely_faces, likely_face_appear_times):
+                if face not in summary_data[speaker]:
+                    summary_data[speaker][face] = {'count': face_appear_times, 'timestamps': [start_time]}
+                else:
+                    summary_data[speaker][face]['count'] += face_appear_times
+                    summary_data[speaker][face]['timestamps'].append(start_time)
+
+        self.face_votes = {}
+
+        # Filter out isolated faces that appear only once within the specified time interval
+        # and count votes for each face per speaker
+        isolated_faces = []
+        for speaker, face_counts in summary_data.items():
+            face_counts_copy = face_counts.copy()
+            for face, face_data in face_counts_copy.items():
+                timestamps = sorted(face_data['timestamps'])
+                isolated_timestamps = []
+                for i in range(1, len(timestamps)):
+                    left_interval_count = sum(1 for t in timestamps[:i] if timestamps[i] - t <= interval)
+                    right_interval_count = sum(1 for t in timestamps[i+1:] if t - timestamps[i] <= interval)
+                    if left_interval_count + right_interval_count <=  min_count:
+                        isolated_timestamps.append(timestamps[i])
+
+                if len(isolated_timestamps) >= 1:
+                    isolated_faces.append(face)
+
+        # Call the update_input_data function with input_data and isolated_faces as arguments
+        input_data = self._update_input_data(input_data, isolated_faces)
+
+        summary_data = {}
+
+        # Aggregate the data by speaker and face within the specified time interval
+        for entry in input_data:
+            start_time = entry['start']
+            speaker = entry['speaker']
+            likely_faces = entry['likely_face']
+            likely_face_appear_times = entry['likely_face_appear_times']
+
+            if speaker not in summary_data:
+                summary_data[speaker] = {}
+
+            for face, face_appear_times in zip(likely_faces, likely_face_appear_times):
+                if face not in summary_data[speaker]:
+                    summary_data[speaker][face] = {'count': face_appear_times, 'timestamps': [start_time]}
+                else:
+                    summary_data[speaker][face]['count'] += face_appear_times
+                    summary_data[speaker][face]['timestamps'].append(start_time)
+
+
+        self.face_votes = {}
+
+        # Count votes for each face per speaker
+        for speaker, face_counts in summary_data.items():
+            for face, face_data in face_counts.items():
+                if face not in self.face_votes:
+                    self.face_votes[face] = {}
+                if speaker not in self.face_votes[face]:
+                    self.face_votes[face][speaker] = 0
+                self.face_votes[face][speaker] += face_data['count']
+     
+
+        face_speaker_mapping = {}
+
+        for face, speaker_votes in self.face_votes.items():
+            best_speaker, max_count, second_best_speaker, second_max_count = self._find_best_speaker(speaker_votes)
+            face_speaker_mapping[face] = (best_speaker, max_count, second_best_speaker, second_max_count)
+
+        for face, (best_speaker, max_count, second_best_speaker, second_max_count) in face_speaker_mapping.items():
+            for other_face, (other_best_speaker, other_max_count, other_second_best_speaker, other_second_max_count) in face_speaker_mapping.items():
+                if face != other_face and best_speaker == other_best_speaker:
+                    if max_count > other_max_count:
+                        face_speaker_mapping[other_face] = (other_second_best_speaker, other_second_max_count, other_best_speaker, other_max_count)
+                    else:
+                        face_speaker_mapping[face] = (second_best_speaker, second_max_count, best_speaker, max_count)
+                    break
+
+        result = {face: (best_speaker, max_count) for face, (best_speaker, max_count, _, _) in face_speaker_mapping.items()}
+        # result = {face: best_speaker for face, (best_speaker, max_count, _, _) in face_speaker_mapping.items()}
+
+        result = {k: v[0] for k, v in result.items() if  v[1] >= 3}
+        
+        return result
+
+
+    def _find_best_speaker(self, speaker_votes):
+        max_count = 0
+        second_max_count = 0
+        best_speaker = None
+        second_best_speaker = None
+        for speaker, count in speaker_votes.items():
+            if count > max_count:
+                second_max_count = max_count
+                second_best_speaker = best_speaker
+                max_count = count
+                best_speaker = speaker
+            elif count > second_max_count:
+                second_max_count = count
+                second_best_speaker = speaker
+        return best_speaker, max_count, second_best_speaker, second_max_count
     
-# # Example usage:
-# video_analyzer = VideoSpeakerFaceAnalyzer("/home/huimingsun/Desktop/RESEARCH_PROJECT/NGP/data/video.mp4")
-# result = video_analyzer.analyze()
+        
+    def _update_input_data(self, input_data, isolated_faces):
+        new_input_data = []
 
-# speaker_diarization = VideoSpeakerDialization(face_embedding_weight = 0.08)
+        for entry in input_data:
+            likely_faces = entry['likely_face']
+            new_likely_faces = [face for face in likely_faces if face not in isolated_faces]
+            if new_likely_faces:
+                new_entry = entry.copy()
+                new_entry['likely_face'] = new_likely_faces
+                new_input_data.append(new_entry)
+            else:
+                new_input_data.append(entry)
 
-# segments, face_speaker_mapping = speaker_diarization.analyze(vs, audio_file = 'audio.wav')
+        return new_input_data
