@@ -2,6 +2,10 @@
 ## Then video captioning
 ## Then langchian find related frames interval
 
+# Video Demo
+https://github.com/HMS97/NGP/assets/27955693/4da86dcd-1e3a-487c-90a7-8318fa0f447f
+
+
 
 # 1. Face Recognition
 ```
