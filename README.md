@@ -1,6 +1,6 @@
-## First do face recognition, then do whispering detection, speaker diarization, and combine video speech darilization.
-## Then video captioning
-## Then langchian find related frames interval
+## 
+First do face recognition, then do whispering detection, speaker diarization, and combine video speech darilization.
+Then video captioning,then langchian find related frames interval
 
 # Video Demo
 https://github.com/HMS97/NGP/assets/27955693/4da86dcd-1e3a-487c-90a7-8318fa0f447f
